@@ -23,15 +23,15 @@ public class UnshortenTopology {
     
     builder.setSpout("spout", new TwitterSpout(), 1);
     
-    builder.setBolt("unshortenBolt", new UnshortenBolt(), 8)
+    builder.setBolt("unshortenBolt", new UnshortenBolt(), 4)
              .shuffleGrouping("spout");
-    builder.setBolt("dbBolt", new CassandraBolt(), 5)
-             .shuffleGrouping("unshortenBolt").setDebug(true);
+    builder.setBolt("dbBolt", new CassandraBolt(), 2)
+             .shuffleGrouping("unshortenBolt");
 
     Config conf = new Config();
     conf.setDebug(false);
 
-    
+    //submit it to the cluster, or submit it locally
     if(args!=null && args.length > 0) {
         conf.setNumWorkers(3);
         
@@ -42,7 +42,7 @@ public class UnshortenTopology {
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("unshortening", conf, builder.createTopology());
     
-        Thread.sleep(30000);
+        Thread.sleep(10000);
 
         cluster.shutdown();
     }

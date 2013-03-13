@@ -57,6 +57,7 @@ public class Utils {
 		} catch (MalformedURLException e) {
 			log.error(e.toString());
 		} catch (IOException e) {
+			//usually Http Response code 503
 			log.error(e.toString());
 		}
 

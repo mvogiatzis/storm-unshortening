@@ -1,6 +1,8 @@
 package spouts;
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
@@ -21,6 +23,13 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 
+/**
+ * Twitter spout connected to real-time stream. It stores tweet statuses to a queue
+ * and emits them to the topology.
+ * 
+ * @author Michael Vogiatzis
+ *
+ */
 public class TwitterSpout extends BaseRichSpout{
 
 	private static final Logger log = Logger.getLogger(TwitterSpout.class);
@@ -53,13 +62,20 @@ public class TwitterSpout extends BaseRichSpout{
 	    };
 	    
 	    //twitter stream authentication setup
+	    Properties prop = new Properties();
+	    try {
+			prop.load(TwitterSpout.class.getClassLoader().getResourceAsStream("config.properties"));
+		} catch (IOException e) {
+			log.error(e.toString());
+		}
+	    
 	    ConfigurationBuilder twitterConf = new ConfigurationBuilder();
 	    twitterConf.setIncludeEntitiesEnabled(true);
-	    //TODO read from properties file
-	    twitterConf.setOAuthAccessToken("890618534-kB2aktHhcM90Zuro0XIjAHrGPHdbj5wAXnpJk9x3");
-	    twitterConf.setOAuthAccessTokenSecret("pV1HUx4mSLix0e8xREGlzuIXHpulcbj5zu0N5c4jA");
-	    twitterConf.setOAuthConsumerKey("IktUV9pWPfmzTbwbQTNQMQ");
-	    twitterConf.setOAuthConsumerSecret("MjQM7iATW4G1Co42eeV0AdysrGz605wC8uK4mkAUZvw");
+
+	    twitterConf.setOAuthAccessToken(prop.getProperty("OATH_ACCESS_TOKEN"));
+	    twitterConf.setOAuthAccessTokenSecret(prop.getProperty("OATH_ACCESS_TOKEN_SECRET"));
+	    twitterConf.setOAuthConsumerKey(prop.getProperty("OATH_CONSUMER_KEY"));
+	    twitterConf.setOAuthConsumerSecret(prop.getProperty("OATH_CONSUMER_SECRET"));
 	    TwitterStream twitterStream = new TwitterStreamFactory(twitterConf.build()).getInstance();
 	    twitterStream.addListener(listener);
 	    
@@ -71,7 +87,7 @@ public class TwitterSpout extends BaseRichSpout{
 	@Override
 	public void nextTuple() {
 		Status ret = queue.poll();
-		Utils.sleep(500);
+		Utils.sleep(200);
         if(ret==null) {
         	//if queue is empty sleep the spout thread so it doesn't consume resources
             Utils.sleep(50);

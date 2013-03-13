@@ -40,9 +40,7 @@ public class Schema {
 		Properties prop = new Properties();
 		replFactor = 1;
 		try {
-			FileInputStream finputstream = new FileInputStream(
-					"config.properties");
-			prop.load(finputstream);
+			prop.load(Schema.class.getClassLoader().getResourceAsStream("config.properties"));
 			replFactor = Integer.valueOf(prop.getProperty("REPL_FACTOR"));
 			host = String.valueOf(prop.getProperty("HOST"));
 			clusterName = String.valueOf(prop.getProperty("CLUSTERNAME"));
@@ -50,7 +48,6 @@ public class Schema {
 			System.out.println("Host: " + host);
 			System.out.println("Cluster name: " + clusterName);
 
-			finputstream.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

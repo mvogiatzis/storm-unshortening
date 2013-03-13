@@ -47,8 +47,10 @@ public class UnshortenBolt extends BaseRichBolt{
 		for (URLEntity url : urls){
 			String shortURL = url.getURL();
 			String expandedURL = Utils.unshortenIt(shortURL);
-			
-			ouc.emit(new Values(shortURL, expandedURL));
+			if (expandedURL!=null)
+				{ouc.emit(new Values(shortURL, expandedURL));
+				log.info("Emitting: " + shortURL + ", "+expandedURL);
+				}
 		}
 		
 		ouc.ack(tuple);

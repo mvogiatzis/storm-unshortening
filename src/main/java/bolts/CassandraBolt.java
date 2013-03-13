@@ -66,6 +66,7 @@ public class CassandraBolt extends BaseRichBolt {
 		if (expUrl != null) {
 			String shortUrl = tuple.getStringByField("shortUrl");
 			updateDB(shortUrl, expUrl);
+			log.info("DB Update!");
 		}
 
 		ouc.ack(tuple);
