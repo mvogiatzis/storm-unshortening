@@ -20,4 +20,4 @@ License
 -------
 
 Feel free to copy, alter or distribute this project.
-See (LICENSE.md)[LICENSE.md] for licensing information.
+See [LICENSE.md](LICENSE.md) for licensing information.
