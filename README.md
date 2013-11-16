@@ -19,5 +19,5 @@ This is necessary to consume the public stream or perform any other twitter-spec
 License
 -------
 
-Feel free to copy, alter or distribute this project.
+Feel free to copy, alter or distribute this project.  
 See [LICENSE.md](LICENSE.md) for licensing information.
